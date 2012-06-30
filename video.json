@@ -1,0 +1,16 @@
+{ 
+    "video_array":
+    [
+        {
+            "videoid":"",
+            "pos":
+                {
+                    "x":"",
+                    "y":""
+                },
+            "vote_plus":"",
+            "vote_minus":"",
+            "user_id":""
+        }
+    ]
+}
