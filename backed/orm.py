@@ -19,7 +19,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from geoalchemy import (Geometry, Point, LineString, Polygon,
 GeometryColumn, GeometryDDL, WKTSpatialElement)
 
-engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('sqlite:///:memory:', echo=False)
 session = sessionmaker(bind=engine)()
 
 print engine.execute("select 1").scalar()
@@ -80,18 +80,23 @@ class Zone(Base):
         #    print i
         return "<Zone('%d','%d','%s')>" % (self.id, self.group_id, self.group_img_url)
 
+#print User.__table__
 
 user1 = User(1)
 user2 = User(2)
 user3 = User(3)
-print user3
+#print user3
 
 video1 = Video(1,5.0,6.7,0,0,1)
-video3 = Video(1,5.0,6.7,0,0,8)
-print video3
+video3 = Video(2,5.0,6.7,0,0,1)
+#print video3
 
 zone1 = Zone(id=21, group_id=1, group_img_url="www.google.com", zone_geom='POLYGON((-88.1147292993631 42.7540605095542,-88.1548566878981 42.7824840764331,-88.1799363057325 42.7707802547771,-88.188296178344 42.7323248407643,-88.1832802547771 42.6955414012739,-88.1565286624204 42.6771496815287,-88.1448248407643 42.6336783439491,-88.131449044586 42.5718152866242,-88.1013535031847 42.565127388535,-88.1080414012739 42.5868630573248,-88.1164012738854 42.6119426751592,-88.1080414012739 42.6520700636943,-88.0980095541401 42.6838375796178,-88.0846337579618 42.7139331210191,-88.1013535031847 42.7423566878981,-88.1147292993631 42.7540605095542))')
 
-session.add_all([user1, user2, user3, video1, video3, zone1])
+Base.metadata.create_all(engine) 
 
-print zone1
+#session.add_all([user1])
+session.add_all([user1, user2, user3, video1, video3])
+session.commit()
+
+#print zone1
