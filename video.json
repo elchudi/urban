@@ -2,14 +2,14 @@
     "video_array":
     [
         {
-            "videoid":"",
+            "id":"",
             "pos":
                 {
                     "x":"",
                     "y":""
                 },
-            "vote_plus":"",
-            "vote_minus":"",
+            "vote_up":"",
+            "vote_down":"",
             "user_id":""
         }
     ]
