@@ -10,7 +10,8 @@
                 },
             "vote_up":"",
             "vote_down":"",
-            "user_id":""
+            "user_id":"",
+            "video_url":""
         }
     ]
 }
