@@ -1,50 +1,27 @@
-from bottle import route, run, get, request
-from zone import Zone
+from bottle import route, run, get, request, post
+import zone
 import os
 import json
+import video
 
-count = [0]
-alpha = 'A0'
-col = ['FF0000', 'FFCB00', '2E16B1', '00CC00']
-img_url = ["url","url","url","url"]
-colors = []
+zone.updateZone(video.videos)
 
-
-cen = [41.393226,2.151604]
-pla = [41.382665,2.180443]
-mon = [41.408162,2.128944]
-cenizq = [41.373391,2.128258]
-monizq = [41.38962,2.110062]
-plaizq = [41.355096,2.154694]
-monder = [41.431848,2.161217]
-cender = [41.427214,2.196579]
-plader = [41.413312,2.221985]
-
-z1p = cen + mon + monizq + cenizq
-z2p = cen + cender + monder + mon
-z3p = cen + cenizq + plaizq + pla
-z4p = cen + pla + plader + cender
-
-for c in col:
-    colors.append(alpha + c)
-
-class Zone():
+@get('/video')
+def videoGet():
     
-    def __init__(self, polyline):
-        self.polyline = polyline
-        self.id = count[0]
-        self.group_id_rgb = colors[count[0]]
-        self.group_img_url = img_url[count[0]]
-        count[0] += 1
+    #x1 = int(request.params.get('x1'))
+    #y1 = int(request.params.get('y1'))
+    #x2 = int(request.params.get('x2'))
+    #y2 = int(request.params.get('y2'))
 
-
-#z1 = Zone([41.38962,2.110062,41.373391,2.128258,41.393226,2.151604,41.408162,2.128944])
-z1 = Zone(z1p)
-z2 = Zone(z2p)
-z3 = Zone(z3p)
-z4 = Zone(z4p)
-
-zones = [z1, z2, z3, z4]
+    toRet = ""
+    for z in video.videos:
+        toRet += json.dumps(z.__dict__)
+        toRet += ','
+    toRet = toRet[:-1] 
+    toRet = '{"video_array":['+ toRet  + ']}'
+    print toRet
+    return toRet
 
 @get('/hello/:name')
 def index(name='World'):
@@ -60,8 +37,15 @@ def map():
     #x2 = int(request.params.get('x2'))
     #y2 = int(request.params.get('y2'))
 
-    
-    return '%s' % json.dumps(zones[0].__dict__)
+    toRet = ""
+    for z in zone.zones:
+        toRet += json.dumps(z.__dict__)
+        toRet += ','
+    toRet = toRet[:-1] 
+    toRet = '{"zone_array":['+ toRet  + ']}'
+    print toRet
+    return toRet
+    #return '%s' % json.dumps(zone.zones[0].__dict__)
 
 @get('/json')
 def jsonstruct():
@@ -76,6 +60,13 @@ def jsonstruct():
     os.chdir( savedPath )
     return toRet
 
+@get('/vote') # or @route('/login', method='POST')
+def vote():
+    idstr = request.params.get('id')
+    id = int(idstr)
+    video.videos[id-1].vote_up = video.videos[id-1].vote_up + 1 
+    zone.updateZone(video.videos)
+    return ""
 
     
 
